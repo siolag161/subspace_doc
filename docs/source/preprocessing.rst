@@ -40,7 +40,7 @@ Normalization
 -------------------------------------------------------------
 The normalization task consists of projecting the dataset onto equal-sized bins while computing the average over this portion. It can be done using a R script which requires as parameters: the ``chromosome`` (for now i cannot perform on the whole genome, we have to specifies the which chromosome that we want to limit the datas), the ``start`` and ``end`` base pair and the ``bin-size``.
 
-
+.. _pre_processing_format:
 Construction of output
 -------------------------------------------------------------
 The output files are also csv-like text files but have a slighly different format to the bedgraph file since it contains values of not only one but multiple tracks:
