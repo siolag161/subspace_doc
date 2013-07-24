@@ -7,7 +7,7 @@ Clustering
 
 Overview
 -------------------------------------------------------------
-The clustering part is handled mostly by the Knime plateform using the components provided by the `OpenSubspace Project http://dme.rwth-aachen.de/en/OpenSubspace>`_. It take the files of a specific csv-like format as input and perform the subspace cluster analysis using multiple algorithms on a set of different parameters,
+The clustering part is handled mostly by the Knime plateform using the components provided by the `OpenSubspace Project <http://dme.rwth-aachen.de/en/OpenSubspace>`_. It take the files of a specific csv-like format as input and perform the subspace cluster analysis using multiple algorithms on a set of different parameters,
 
 By definition, the result of a run of a subspace clustering algorithm is a list of pair :math:`(O_{i},D_{i})` objects and dimensions associated. We will write all relevant information onto disk, including: the clustering_id, cluster objects, cluster dimensions, paremeters used, run_id, algorithm employed.
 
