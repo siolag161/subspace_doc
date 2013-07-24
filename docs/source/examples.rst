@@ -64,14 +64,16 @@ Post-processing
     * Example::
 	pareto.py -i ./test/output_15_03_2014.csv -o ./test/output_15_03_2014_pareto.csv -c 1 # as we specified 1 in the km.py
 
-* **Pareto Frontier**: list of parameters:
+* **Scoring/Filtering/Ranking**: list of parameters:
     * -h: help
     * -i: input 
     * -o: output
     * -r: reference clustering source (shoule be at cluster level in order to be able construct its structure)
     * -c: cluster or clustering level of the output
-    * -f: filtering or not
+    * -f: filtering or not (we may opt for measuring without performing the redundancy filtering)
     * -c: cluster or clusterings level of the format input: cluster:  if 1 and clustering: otherwise (0 by default)
+    * -o: object threshold (for similarity compairison: we say they are similar in term of object if the score > this value)
+    * -d: dimension threshold (also for similarity comparision)
     * Example::
 	subspace_clustering.py -i <inputfile> -r <reference-clustering path should be at the cluster_level> -o <outputfile> -c <output: 1 or cluster-level, otherwise it is clustering level> -f <Filtering or not> -t <in case of filtering is enabled, specifies which to output: the original (0), the filtered (1) or both (otherwise)>
 
