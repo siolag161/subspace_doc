@@ -54,7 +54,7 @@ Post-processing
     * -p: number of parallel processes (7 by default)
     * -c: cluster or clusterings level of the format output: cluster:  if 1 and clustering: otherwise (0 by default)
     * Example::
-	python km.py -i ./test/suite_15.csv -o ./test/output_15_03_2014.csv -c 4 -n 4 -p 7 - c 1 
+	python km.py -i ./input/suite_15.csv -o ./output/suite_15_kmean_clusterings.csv -c 4 -n 4 -p 7 - c 1 
 
 * **Pareto Frontier**: list of parameters:
     * -h: help
@@ -62,7 +62,7 @@ Post-processing
     * -o: output
     * -c: cluster or clusterings level of the format input: cluster:  if 1 and clustering: otherwise (0 by default)
     * Example::
-	pareto.py -i ./test/output_15_03_2014.csv -o ./test/output_15_03_2014_pareto.csv -c 1 # as we specified 1 in the km.py
+	pareto.py -i ./output/suite_15_kmean_clusterings.csv -o ./output/pareto_suite_15_kmean_clusterings.csv -c 1 # as we specified 1 in the km.py
 
 * **Scoring/Filtering/Ranking**: list of parameters:
     * -h: help
@@ -75,7 +75,7 @@ Post-processing
     * -o: object threshold (for similarity compairison: we say they are similar in term of object if the score > this value)
     * -d: dimension threshold (also for similarity comparision)
     * Example::
-	subspace_clustering.py -i <inputfile> -r <reference-clustering path should be at the cluster_level> -o <outputfile> -c <output: 1 or cluster-level, otherwise it is clustering level> -f <Filtering or not> -t <in case of filtering is enabled, specifies which to output: the original (0), the filtered (1) or both (otherwise)>
+	subspace_clustering.py -i ./output/suite_15_kmean_clusterings.csv -r ./input/sexton.csv -o ./scoring.csv -c 1 -f 1 -o 0.5 -d 0.5
 
 
 
