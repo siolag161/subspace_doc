@@ -21,17 +21,19 @@ There is a simple python script called ``process_data.py`` which facilates the p
 
 ``.bedgraph`` is a csv-like file type and in our case is supposed to have 4 columns of which the first 3 related to coordonate information (chromosome, start, end) while the last one represent its average value over this portion). Therefore, it should look like:
 
-+------------+------------+-----------+
++-------+---------+-------+-----------+
 | chr   | start   | end   | val       |
-+============+============+===========+
++=======+=========+=======+===========+
 | chr3R | 0       | 1000  |  0.5      |
-+-------+----+------------+-----------+
++-------+---------+-------+-----------+
 | chr3R | 2000    | 3000  |  0.8      |
-+-------+-----+------------+----------+
++-------+---------+-------+-----------+
 | ...   | ....    | ...   |  0.8      |
-+-------+----+------------+-----------+
++-------+---------+-------+-----------+
 | chr3R | 24000   | 25000 |  0.5      |
-+-------+----+------------+-----------+
++-------+---------+-------+-----------+
+
+
 otherwise it should be corrected.
 
 Normalization
@@ -43,15 +45,15 @@ Construction of output
 -------------------------------------------------------------
 The output files are also csv-like text files but have a slighly different format to the bedgraph file since it contains values of not only one but multiple tracks:
 
-+------------+------------+-----------+-----------+-----------+
++-------+---------+-------+-----------+-----------+-----------+
 | chr   | start   | end   |  track1   |    ...    |  track n  |
-+============+============+===========+===========+===========+
++=======+=========+=======+===========+===========+===========+
 | chr3R | 0       | 1000  |    0.5    |    ...    |    0.5    |
-+-------+----+------------+-----------+-----------+-----------+
++-------+---------+-------+-----------+-----------+-----------+
 | ....  | ....    |  ...  |  ...      |    ...    |    ....   |
-+-------+-----+------------+----------+-----------+-----------+
++-------+---------+-------+-----------+-----------+-----------+
 | chr3R | 1000    | 2000  |  ...      |    ...    |    0.5    |
-+-------+-----+------------+----------+-----------+-----------+
++-------+---------+-------+-----------+-----------+-----------+
 
 There are many way to do this one of which is to perform first several normalization task on a set of tracks with which we want to work, then we join them together by their coorinates. Or we can append ``track$val`` one by one.
 

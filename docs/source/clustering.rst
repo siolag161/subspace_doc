@@ -1,10 +1,30 @@
 .. highlight:: rst
 
-Introduction 
+Clustering
 ==========================================================
 
-This document is meant to give a tutorial-like overview of how to use the code that comes 
-with the subspace clustering project.
+The clustering part is handled mostly by the Knime plateform using the components provided by the `OpenSubspace Project http://dme.rwth-aachen.de/en/OpenSubspace>`_. 
 
-More advanced information can be accessed via "more info" links or consulted in the report (thesis/slides).
- 
+
+Overview
+-------------------------------------------------------------
+
+
+
+
+Input
+-------------------------------------------------------------
+
+The input for the clusteing is simply the output of the :ref:`_pre_processing_format` task i.e. csv-like text-files containing a set of tracks.
+
+Output
+-------------------------------------------------------------
+Regardless of algorithms employed, 
+
+
+Algorithms
+-------------------------------------------------------------
+List of algorithms employed:
+* Subclu
+* ...
+

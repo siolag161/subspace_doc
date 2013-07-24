@@ -1,6 +1,6 @@
 .. highlight:: rst
 
-Introduction 
+Post-processing
 ==========================================================
 
 This document is meant to give a tutorial-like overview of how to use the code that comes 
