@@ -12,7 +12,9 @@ Contents:
    :maxdepth: 2
 
    intro
-   pre-processing
+   preprocessing
+   clustering
+   postprocessing
    examples
 
 
