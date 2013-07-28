@@ -1,12 +1,13 @@
 .. highlight:: rst
 
+.. _introduction_label:
 Introduction 
 ==========================================================
 
 This document is meant to give a tutorial-like overview of how to use the code that comes 
 with the subspace clustering project.
 
-More advanced information can be accessed via "more info" links or consulted in the report (thesis/slides).
+For ore detailled information, one can can refer to the reports (:download:`thesis <static/internship_report_master_2013.pdf>` or :download:`slides <static/presentation_master_2013_final.pdf>`).
  
 Overview
 ------------------------------------
