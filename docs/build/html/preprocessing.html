@@ -1,0 +1,229 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Preprocessing &mdash; subspace 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="subspace 0.1 documentation" href="index.html" />
+    <link rel="next" title="Clustering" href="clustering.html" />
+    <link rel="prev" title="Introduction" href="intro.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="clustering.html" title="Clustering"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">subspace 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="preprocessing">
+<h1>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Pre-processing tasks involve</p>
+<ul class="simple">
+<li>Conversion from different formats into bedgraph using the tool provided by UCSC.</li>
+<li>Normalization of datasets</li>
+<li>Construction and generation of the data textfile</li>
+</ul>
+<p>The idea is to be able to generate the final text files from datasets obtained from the Vital-IT BBCF plateform.</p>
+</div>
+<div class="section" id="data-conversion">
+<h2>Data conversion<a class="headerlink" href="#data-conversion" title="Permalink to this headline">¶</a></h2>
+<p>The data obtained which provided by the Vital-IT BBCF plateform are first converted into <tt class="docutils literal"><span class="pre">.bedgraph</span></tt> format for the ease of processing. This process is achieved using the converter provided by the UCSC (mostly from .bw to .bedgraph).</p>
+<p>There is a simple python script called <tt class="docutils literal"><span class="pre">process_data.py</span></tt> which facilates the patch processing. In brief, it will find all the <tt class="docutils literal"><span class="pre">.bw</span></tt> files and convert it into <tt class="docutils literal"><span class="pre">.bedgraph</span></tt> file while keeping the same name.</p>
+<p><tt class="docutils literal"><span class="pre">.bedgraph</span></tt> is a csv-like file type and in our case is supposed to have 4 columns of which the first 3 related to coordonate information (chromosome, start, end) while the last one represent its average value over this portion). Therefore, it should look like:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="26%" />
+<col width="21%" />
+<col width="32%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">chr</th>
+<th class="head">start</th>
+<th class="head">end</th>
+<th class="head">val</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>chr3R</td>
+<td>0</td>
+<td>1000</td>
+<td>0.5</td>
+</tr>
+<tr class="row-odd"><td>chr3R</td>
+<td>2000</td>
+<td>3000</td>
+<td>0.8</td>
+</tr>
+<tr class="row-even"><td>...</td>
+<td>&nbsp;</td>
+<td>...</td>
+<td>0.8</td>
+</tr>
+<tr class="row-odd"><td>chr3R</td>
+<td>24000</td>
+<td>25000</td>
+<td>0.5</td>
+</tr>
+</tbody>
+</table>
+<p>otherwise it should be corrected.</p>
+</div>
+<div class="section" id="normalization">
+<h2>Normalization<a class="headerlink" href="#normalization" title="Permalink to this headline">¶</a></h2>
+<p>The normalization task consists of projecting the dataset onto equal-sized bins while computing the average over this portion. It can be done using a R script which requires as parameters: the <tt class="docutils literal"><span class="pre">chromosome</span></tt> (for now i cannot perform on the whole genome, we have to specifies the which chromosome that we want to limit the datas), the <tt class="docutils literal"><span class="pre">start</span></tt> and <tt class="docutils literal"><span class="pre">end</span></tt> base pair and the <tt class="docutils literal"><span class="pre">bin-size</span></tt>.</p>
+</div>
+<div class="section" id="construction-of-output">
+<h2>Construction of output<a class="headerlink" href="#construction-of-output" title="Permalink to this headline">¶</a></h2>
+<p>The output files are also csv-like text files but have a slighly different format to the bedgraph file since it contains values of not only one but multiple tracks:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="16%" />
+<col width="13%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">chr</th>
+<th class="head">start</th>
+<th class="head">end</th>
+<th class="head">track1</th>
+<th class="head">...</th>
+<th class="head">track n</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>chr3R</td>
+<td>0</td>
+<td>1000</td>
+<td>0.5</td>
+<td>...</td>
+<td>0.5</td>
+</tr>
+<tr class="row-odd"><td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>chr3R</td>
+<td>1000</td>
+<td>2000</td>
+<td>...</td>
+<td>...</td>
+<td>0.5</td>
+</tr>
+</tbody>
+</table>
+<p>There are many way to do this one of which is to perform first several normalization task on a set of tracks with which we want to work, then we join them together by their coorinates. Or we can append <tt class="docutils literal"><span class="pre">track$val</span></tt> one by one.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Preprocessing</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#data-conversion">Data conversion</a></li>
+<li><a class="reference internal" href="#normalization">Normalization</a></li>
+<li><a class="reference internal" href="#construction-of-output">Construction of output</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intro.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="clustering.html"
+                        title="next chapter">Clustering</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/preprocessing.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="clustering.html" title="Clustering"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction"
+             >previous</a> |</li>
+        <li><a href="index.html">subspace 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, pdt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

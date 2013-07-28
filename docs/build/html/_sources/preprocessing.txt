@@ -1,6 +1,5 @@
 .. highlight:: rst
 
-.. _preprocessing_label:
 Preprocessing 
 ==========================================================
 

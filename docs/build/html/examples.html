@@ -1,0 +1,241 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Usage &mdash; subspace 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="subspace 0.1 documentation" href="index.html" />
+    <link rel="prev" title="Post-processing" href="postprocessing.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="postprocessing.html" title="Post-processing"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">subspace 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="preprocessing">
+<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt><strong>conversion</strong>: we first put the files to be converted into the input folder. by default, it will put the converted into the output folder. Both these two folders are direct descendants of the one containing <cite>process_data.py</cite> entry point::</dt>
+<dd><p class="first last">python process_data</p>
+</dd>
+</dl>
+<p>TODO: The next version will include the option to specify the source folder and the destination path</p>
+</li>
+<li><p class="first"><strong>normalization</strong>: Basically we need two scripts, the first one named <tt class="docutils literal"><span class="pre">binBedGraph.R</span></tt> neccessary for binning while the second one called <cite>sexton_import.R</cite> needed for importing Sexton as reference.</p>
+</li>
+</ul>
+<dl class="docutils">
+<dt>Dataset of 15 track::</dt>
+<dd><dl class="first docutils">
+<dt>dataset = binAverage.BedGraph_Fillion(fname = &#8221;./data/fillion_2010.csv&#8221;,</dt>
+<dd>colnames = c(&#8220;H1&#8221;, &#8220;BEAF32&#8221;, &#8220;CTCF&#8221;,&#8221;ChIP.H3K9me2.normH3&#8221;),
+chr=&#8221;chr3R&#8221;, startPos = 0, endPos = 27e6, binSize=10000) #importing the fillion tracks</dd>
+<dt>track_list = c(&#8220;HP1&#8221;,&#8221;H3K4Me3&#8221;,&#8221;H3K27Me3&#8221;,&#8221;DNase&#8221;,&#8221;CBP&#8221;,</dt>
+<dd>&#8220;H3K9Ac&#8221;, &#8220;K4me1&#8221;, &#8220;PolII&#8221;, &#8220;SuHw&#8221;, &#8220;H3K27ac&#8221;,&#8221;CP190&#8221;) #list of tracks to import</dd>
+</dl>
+<p>for (track_name in track_list)
+{</p>
+<blockquote>
+<div><p>input_name = paste(&#8220;~/deme/data/output/&#8221;, track_name,&#8221;.bedgraph&#8221;, sep=&#8221;&#8221;) # construct the path for each path
+print(input_name)
+track = binAverage.BedGraph(fname=input_name,</p>
+<blockquote>
+<div>chr=&#8221;chr3R&#8221;, startPos = 0, endPos = 27e6, binSize=10000) #computing the track limiting on the chromosome 3R with bin size = 10k</div></blockquote>
+<p>dataset[, track_name] = track$val # add new track as a variable in this data frame</p>
+</div></blockquote>
+<p class="last">}</p>
+</dd>
+</dl>
+<p>Sexton reference pseudo code for usage:</p>
+<div class="highlight-rst"><div class="highlight"><pre>sexton_tracks = sexton_track(path, chr, from, to, bin_size) # a bit like above
+sexton_dimensions_idx = computing_index (get indexes of the 4 dimensions used in sexton clustering)
+sexton_clusterings = sexton.clustering_generate(sexton_tracks, run, sexton_dimensions_idx)
+write.table(sexton_clusterings)
+
+TODO: clustering_id and other clustering and not only sexton
+</pre></div>
+</div>
+</div>
+<div class="section" id="post-processing">
+<h2>Post-processing<a class="headerlink" href="#post-processing" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt><strong>Exhautive-Kmeans</strong>: list of parameters:</dt>
+<dd><ul class="first last">
+<li><p class="first">-h: help</p>
+</li>
+<li><p class="first">-i: input</p>
+</li>
+<li><p class="first">-o: output</p>
+</li>
+<li><p class="first">-d: size of projection (for instance 8 out of 15 available all of which will be considered as the full dimension by k-means)</p>
+</li>
+<li><p class="first">-n: number of clusters (or k)</p>
+</li>
+<li><p class="first">-p: number of parallel processes (7 by default)</p>
+</li>
+<li><p class="first">-c: cluster or clusterings level of the format output: cluster:  if 1 and clustering: otherwise (0 by default)</p>
+</li>
+<li><dl class="first docutils">
+<dt>Example::</dt>
+<dd><p class="first last">python km.py -i ./input/suite_15.csv -o ./output/suite_15_kmean_clusterings.csv -c 4 -n 4 -p 7 - c 1</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Pareto Frontier</strong>: list of parameters:</dt>
+<dd><ul class="first last">
+<li><p class="first">-h: help</p>
+</li>
+<li><p class="first">-i: input</p>
+</li>
+<li><p class="first">-o: output</p>
+</li>
+<li><p class="first">-c: cluster or clusterings level of the format input: cluster:  if 1 and clustering: otherwise (0 by default)</p>
+</li>
+<li><dl class="first docutils">
+<dt>Example::</dt>
+<dd><p class="first last">pareto.py -i ./output/suite_15_kmean_clusterings.csv -o ./output/pareto_suite_15_kmean_clusterings.csv -c 1 # as we specified 1 in the km.py</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>Scoring/Filtering/Ranking</strong>: list of parameters:</dt>
+<dd><ul class="first last">
+<li><p class="first">-h: help</p>
+</li>
+<li><p class="first">-i: input</p>
+</li>
+<li><p class="first">-o: output</p>
+</li>
+<li><p class="first">-r: reference clustering source (shoule be at cluster level in order to be able construct its structure)</p>
+</li>
+<li><p class="first">-c: cluster or clustering level of the output</p>
+</li>
+<li><p class="first">-f: filtering or not (we may opt for measuring without performing the redundancy filtering)</p>
+</li>
+<li><p class="first">-c: cluster or clusterings level of the format input: cluster:  if 1 and clustering: otherwise (0 by default)</p>
+</li>
+<li><p class="first">-o: object threshold (for similarity compairison: we say they are similar in term of object if the score &gt; this value)</p>
+</li>
+<li><p class="first">-d: dimension threshold (also for similarity comparision)</p>
+</li>
+<li><dl class="first docutils">
+<dt>Example::</dt>
+<dd><p class="first last">subspace_clustering.py -i ./output/suite_15_kmean_clusterings.csv -r ./input/sexton.csv -o ./scoring.csv -c 1 -f 1 -o 0.5 -d 0.5</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Usage</a><ul>
+<li><a class="reference internal" href="#preprocessing">Preprocessing</a></li>
+<li><a class="reference internal" href="#post-processing">Post-processing</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="postprocessing.html"
+                        title="previous chapter">Post-processing</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/examples.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="postprocessing.html" title="Post-processing"
+             >previous</a> |</li>
+        <li><a href="index.html">subspace 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, pdt.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

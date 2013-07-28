@@ -6,9 +6,6 @@
 Subspace clustering project documentation
 =================================================
 
-Version 0.1
-
-
 Contents:
 
 .. toctree::
