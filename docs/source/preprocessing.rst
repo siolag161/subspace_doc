@@ -6,13 +6,12 @@ Preprocessing
 
 Overview
 ------------------------------------
-Pre-processing tasks involve
+Data pre-processing is the first step in our work-flow in order to uniformize and normalize the data format from different sources to the unique one.
 
 * Conversion from different formats into bedgraph using the tool provided by UCSC.
-* Normalization of datasets
-* Construction and generation of the data textfile
+* Normalization of datasets: the data are normalize using the log-quantile
+* Construction and generation of the dataset: combining differents tracks to form a unique data file under a certain format.
 
-The idea is to be able to generate the final text files from datasets obtained from the Vital-IT BBCF plateform.
 
 Data conversion
 ------------------------------------
@@ -34,18 +33,26 @@ There is a simple python script called ``process_data.py`` which facilates the p
 | chr3R | 24000   | 25000 |  0.5      |
 +-------+---------+-------+-----------+
 
-
 otherwise it should be corrected.
+
+Common issues
+------------------------------------
+Some troubles that one might encounter during this phase includes: 
+* Naming convention: the naming of chromosome might differ from the default pattern ``chrX`` (it might be only `X` instead): for instance in R we can use ``sub("^", "chr", dat$V1)``.
+* Seperator: by default, the seperator equals ``,`` but it might not be the case in reality.
+
 
 Normalization
 -------------------------------------------------------------
 The normalization task consists of projecting the dataset onto equal-sized bins while computing the average over this portion. It can be done using a R script which requires as parameters: the ``chromosome`` (for now i cannot perform on the whole genome, we have to specifies the which chromosome that we want to limit the datas), the ``start`` and ``end`` base pair and the ``bin-size``.
 
-.. _pre_processing_format:
+.. _pre_processing_format_label:
 Construction of output
 -------------------------------------------------------------
-The output files are also csv-like text files but have a slighly different format to the bedgraph file since it contains values of not only one but multiple tracks:
+Our dataset can possibly consist not only one but multiple tracks, thus we will have to combine these track in order to form a unique, matrix-like 
+dataset. We can consider this datase as the join of all these tracks by their common genomic coordinates. It might look as described by :ref:` _preprocessing_construction_output_table` :
 
+.. _preprocessing_construction_output_table:
 +-------+---------+-------+-----------+-----------+-----------+
 | chr   | start   | end   |  track1   |    ...    |  track n  |
 +=======+=========+=======+===========+===========+===========+

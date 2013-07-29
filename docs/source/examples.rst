@@ -6,40 +6,43 @@ Usage
 
 Preprocessing
 ---------------------------
-* **conversion**: we first put the files to be converted into the input folder. by default, it will put the converted into the output folder. Both these two folders are direct descendants of the one containing `process_data.py` entry point::
-    python process_data
+* **conversion**: we first put the ``bigWig`` to be converted in a folder. ``process_data.py`` will output the converted into the output folder::
+    python process_data.py -i <input path folder> -o <output path folder>
 
-  TODO: The next version will include the option to specify the source folder and the destination path
+   there are two options to specify: the input path and the output path::
+    python process_data.py -i ~/deme/data/input/ -o ~/deme/data/output
 
-* **normalization**: Basically we need two scripts, the first one named ``binBedGraph.R`` neccessary for binning while the second one called `sexton_import.R` needed for importing Sexton as reference.
-
-
-Dataset of 15 track::
-    dataset = binAverage.BedGraph_Fillion(fname = "./data/fillion_2010.csv", 
-                                      colnames = c("H1", "BEAF32", "CTCF","ChIP.H3K9me2.normH3"),
-                                      chr="chr3R", startPos = 0, endPos = 27e6, binSize=10000) #importing the fillion tracks
+    ...converting /home/joules/deme/data/input/H3K27Me3_E8_12_GSM439446_merged.bw to /home/joules/deme/data/ouput/H3K27Me3_E8_12_GSM439446_merged.bedgraph ...
+    ...converting /home/joules/deme/data/input/HP1_E8_16_GSM847702_merged.bw to /home/joules/deme/data/ouput/HP1_E8_16_GSM847702_merged.bedgraph ...
+    ....
 
 
-    track_list = c("HP1","H3K4Me3","H3K27Me3","DNase","CBP", 
-               "H3K9Ac", "K4me1", "PolII", "SuHw", "H3K27ac","CP190") #list of tracks to import
-    for (track_name in track_list)
-    {
-        input_name = paste("~/deme/data/output/", track_name,".bedgraph", sep="") # construct the path for each path
-	print(input_name) 
-	track = binAverage.BedGraph(fname=input_name,
-                                chr="chr3R", startPos = 0, endPos = 27e6, binSize=10000) #computing the track limiting on the chromosome 3R with bin size = 10k
-	dataset[, track_name] = track$val # add new track as a variable in this data frame
-    }
+* **normalization**: For normalization-related task, there are two available scripts:
 
+  * ``binAverage.BedGraph``: which takes the bedgraph file path, the limiting parameters (chr, start, end, binSize) and carries out the **binning** and **normalization**. It return a data.frame of the format specificied in the Preprocessing Section.
 
-Sexton reference pseudo code for usage::
-  
-    sexton_tracks = sexton_track(path, chr, from, to, bin_size) # a bit like above
-    sexton_dimensions_idx = computing_index (get indexes of the 4 dimensions used in sexton clustering)
-    sexton_clusterings = sexton.clustering_generate(sexton_tracks, run, sexton_dimensions_idx)
-    write.table(sexton_clusterings)
+  * ``binAverage.BedGraph_Fillion``: which takes the Fillion file path, the track names (column names) that we want to extract from the origial dataset, the delimiting parameters (chr, start, end, binSize). It also carries out the **binning** and **normalization** and it return a data.frame of the format specificied in the Preprocessing Section.
 
-    TODO: clustering_id and other clustering and not only sexton
+  * ``import.fillion_patch``: which takes the path to the bedgraph directory, the path to the Fillion (or any file that looks like it), delimiting information, the set of track names from the Fillion we want to extract. It will find bedgraph files and  call the previous 2 sub-routines, then combine them together to form a unique data.frame R type::
+
+      col_names=c("H1", "BEAF32", "CTCF","ChIP.H3K9me2.normH3")
+      dataset = import.fillion_patch(bedgraph_path="~/deme/data/tester/",
+                               fillion_path="./data/fillion_2010.csv",
+                               chr="chr3R",startPos=0,endPos=3e6,binSize=10000,
+                               sep="\t", colnames=colnames)
+      
+      write.table(dataset, ...)
+
+* **Sexton**: a script to take the Sexton clustering CSV file and then converts it into a file whose format is compatible (meaning we can read it to build a referernce clustering in order to compare with other). It takes the path to the csv file, delimiting information and a list of indexes of the 4 dimensions that were employed during the Sexton cluster analysis w.r.t the set of dimensions that are included in our current dataset.::
+
+    employed_list = c("H1", "HP1", "H3K4Me3","H3K4Me27")
+    colname_idx = tools.IndexFromColnames(colnames(dataset), employed_list) # get the index of the
+    colname_idx = colname_idx - 4 # index corrected, starting from 0 and offset by -3 (3 irrevelant coordinate columns, as we want to situatte them only in term of dimensions)
+
+    sx = sexton.clustering_import(input_name="./data/sexton.csv",chr="chr3R",startPos=0,
+                              endPos=1e6,binSize=1000, sep="\t",run=1, dims=colname_idx)
+    write.table(sx, ...)
+
 
 
 Post-processing
