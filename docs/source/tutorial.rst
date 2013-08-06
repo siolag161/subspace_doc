@@ -8,7 +8,7 @@ In the following section, we will perform the full clustering from the preproces
 
 Overvew
 #############################
-Suppose we have 3 tracks at our disposal: ``HP1, H3K4Me3`` all of which are in the `.bw` format. In addition, we have a bedgraph-like file containing the Sexton clustering and another one contains the Fillion tracks.
+Suppose we have 4 tracks at our disposal: ``CP190, H3K4Me3, H3K27Me3, HP1`` all of which are in the `.bw` format. In addition, we have a bedgraph-like file containing the Sexton clustering and another one contains the Fillion tracks.
 
 Preprocessing
 #############################
@@ -24,11 +24,11 @@ Use with the option ``-h`` give us the instruction of how to use it. So we have 
 
     C:\Users\pdt\Desktop\tutorial\preprocessing>python process_data.py -i ./input -o ./ouput 
    
-After a while, it outputs 3 ``.bw`` in the destination folder.
+After a while, it outputs 4 ``.bw`` in the destination folder.
 
 Binning and normalization
 ---------------------------
-Next, we will construct our dataset composed of 4 Fillion tracks ``"H1", "BEAF32", "CTCF","ChIP.H3K9me2.normH3"`` and the 3   ``HP1``, ``H3K4Me3`` from the converted bedgraph files.
+Next, we will construct our dataset composed of 4 Fillion tracks ``"H1", "BEAF32", "CTCF","ChIP.H3K9me2.normH3"`` and the 4 ``CP190, H3K4Me3, H3K27Me3, HP1`` from the converted bedgraph files.
 
 In order to do so, we can use the helper function import.fillion_patch as following::
 
