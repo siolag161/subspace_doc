@@ -19,6 +19,7 @@ Contents:
    clustering
    postprocessing
    examples
+   tutorial
 
 
 Indices and tables

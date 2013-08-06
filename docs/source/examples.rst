@@ -1,11 +1,11 @@
 .. highlight:: rst
 
+****************************
 Usage
-==========================================================
-
+*****************************
 
 Preprocessing
----------------------------
+###############
 * **conversion**: we first put the ``bigWig`` to be converted in a folder. ``process_data.py`` will output the converted into the output folder::
     python process_data.py -i <input path folder> -o <output path folder>
 
@@ -46,8 +46,7 @@ Preprocessing
 
 
 Post-processing
----------------------------
-
+######################
 * **Exhautive-Kmeans**: list of parameters:
     * -h: help
     * -i: input 
