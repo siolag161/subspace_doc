@@ -40,6 +40,7 @@ The details about the redundancy employed can be seen in the report. In brief, t
    precision_score(reference_clustering, target_clustering):
       compute precision
 
+the interestingness of a given cluster is simply the product of the number of objects and the number of dimensions that it contains.
 
 Scoring/Ranking
 ----------------------------------------
@@ -55,11 +56,8 @@ List of measures:
 * **Internal measures**: 
   * **spatial coherence**: computing the *spatial conpactness* of a clustering
 
-It also output the number of rank of each clustering for each of the aformentioned measures.
+It also output the number of rank of each clustering for each of the aformentioned measures. Look at the report for more details about these measures and how they are implemented.
 
 Pareto frontier
 ----------------------------------------
-In this part, a simple version of Pareto frontier is implemented. The idea is that it first sorts all the instance by the first measure (the other depends if we want to find the minimum or maximum). We can see that the best ranked by any measure always belongs to the Pareto frontier by defition, we add the it in the candidate and then iterate over the rest to check and add those which are not dominated by the last added candidate (otherwise it is not dominated by any of those candidates).
-
-
-
+The most basic definition of the `Pareto frontier <http://en.wikipedia.org/wiki/Pareto_efficiency>`_ of a clustering is the set consisting of clusters that are not dominated by any other cluster in any aspect (dimension).  Here a simple algorithm to find the frontier was implemented. The idea is pretty straightforward: we can see that the best ranked by any measure always belongs to the Pareto frontier by defition, so we first sort all the clusters by the first measure (the other depends if we want to find the minimum or maximum), add the best ranked and then iterate over the rest to check whether the current cluster is dominated by the last added candidate (otherwise it is not dominated by any of those candidates). If it is not dominated then we add to the Pareto frontier.
