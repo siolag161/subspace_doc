@@ -15,7 +15,7 @@ Preprocessing
 
 Conversion
 --------------
-First we would want to convert our big wig ``.bw`` to begraph using the USCD converter tool. Let say there's a folder containg all these file named `input` and we want to put the converted bedgraph files in an `output folder`. There's a ``helper`` python script to help automate the process called ``process_data.py`` ::
+First we would want to convert our big wig ``.bw`` to begraph using the UCSD converter tool. Let say there's a folder containg all these file named `input` and we want to put the converted bedgraph files in an `output folder`. There's a ``helper`` python script to help automate the process called ``process_data.py`` ::
 
     C:\Users\pdt\Desktop\tutorial\preprocessing>python process_data.py -h
     [USAGE]: process_data.py -i <input path folder> -o <output path folder>
@@ -28,23 +28,38 @@ After a while, it outputs 4 ``.bw`` in the destination folder.
 
 Binning and normalization
 ---------------------------
-Next, we will construct our dataset composed of 4 Fillion tracks ``"H1", "BEAF32", "CTCF","ChIP.H3K9me2.normH3"`` and the 4 ``CP190, H3K4Me3, H3K27Me3, HP1`` from the converted bedgraph files.
+Next, we will construct our dataset composed of 4 Fillion tracks ``"H1", "BEAF32", "CTCF","ChIP.H3K9me2.normH3"`` and the 4 ``CP190, H3K4Me3, H3K27Me3, HP1`` from the converted bedgraph files. Suppose we have at disposal a ``bedgraph-like`` that contains information regarding these four tracks whose location is at ``"~/Desktop/tutorial/preprocessing/data/fillion_2010.csv``. We pass this path as value for ``ds_path`` and the name of columns as ``col_names``. Say moreover we have a folder containing 4 bedgraph ``.bedgraph`` data files whose location will be passed as ``bedgraph_path``. This function returns a data.frame which can be exported to a `csv-like` file. (See :ref:`preprocessing_listing` for more information)
 
-In order to do so, we can use the helper function import.fillion_patch as following::
+In order to do so, we can use the helper function ``import.Patch_Process`` as following::
 
-    col_names=c("H1", "BEAF32", "CTCF","ChIP.H3K9me2.normH3") # fillion tracks to retain
-    dataset = import.fillion_patch(bedgraph_path="~/Desktop/tutorial/preprocessing/data/tracks",
-                               fillion_path="~/Desktop/tutorial/preprocessing/data/fillion_2010.csv",
+   
+   # if we have a pre-processed dataset from which we want to extract some data to merge other bedgraph files.
+   # let's say we want to extract H1 and BEAF32 from the fillion_2010.csv which is simply a bedgraph-like 
+   # but contains multiple instead of just one track data.
+   col_names=c("H1", "BEAF32", "CTCF","ChIP.H3K9me2.normH3") # fillion tracks to retain
+   dataset = import.Patch_Process(bedgraph_path="~/Desktop/tutorial/preprocessing/data/tracks",
+                               ds_path="~/Desktop/tutorial/preprocessing/data/fillion_2010.csv",
                                chr="chr3R",startPos=0,endPos=3e6,binSize=10000,
-                               sep="\t", colnames=col_names)
+                               sep="\t", colnames=col_names)	
+							   
+   # otherwise we pass NULL as argument, colnames will be ingored
+   #dataset = import.Patch_Process(bedgraph_path="~/Desktop/tutorial/preprocessing/data/tracks",
+                               #ds_path=NULL,
+                               #chr="chr3R",startPos=0,endPos=3e6,binSize=10000,
+                               #sep="\t", colnames=col_names)	
 	write.table(dataset, file="~/ws/stage/ds/output/datasets.csv", row.names=F)
 
 						
-where ``bedgraph_path`` represents the path to the folder containing the remaining bedgraph tracks.  This function returns a data.frame which can be exported to a `csv-like` file.
+
 
 Sexton reference
 ---------------------------
 The third task in this process is to build the reference clustering file whose format is compatible with our pre-defined ones. The following piece of code will help accomplish that::
+
+
+    # now we want to create a reference clustering file. supposed it is create 
+    # using four tracks "H1", "HP1", "H3K4Me3","H3K4Me27" then we will need
+    # the indexes of these 4 relatively to the tracks in the target columns
 
     employed_list = c("H1", "HP1", "H3K4Me3","H3K4Me27") #the 4 tracks that were used during the Sexton clustering process
     colname_idx = tools.IndexFromColnames(colnames(dataset), employed_list) # get the index of these 4 tracks among the columns in the dataset
